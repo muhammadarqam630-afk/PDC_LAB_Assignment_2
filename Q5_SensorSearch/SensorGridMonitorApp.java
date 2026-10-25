@@ -37,7 +37,21 @@ t1.join();
 t2.join();
 t3.join();
 t4.join();
+double globalMinimum = Math.min(
+    minLeft.getResult(),
+    minRight.getResult()
+);
 
+double globalMaximum = Math.max(
+    maxLeft.getResult(),
+    maxRight.getResult()
+);
+
+System.out.printf(
+    "Global Minimum: %.4f%n", globalMinimum);
+
+System.out.printf(
+    "Global Maximum: %.4f%n", globalMaximum);
 System.out.println("All sensor workers completed.");
 t1.start();
 t2.start();
