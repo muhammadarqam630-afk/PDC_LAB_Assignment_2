@@ -7,6 +7,8 @@ public class CacheLocalityBenchmark {
     private static final double[][] matrix =
             new double[N][N];
 
+    private static volatile double resultSink;
+
     public static void initializeMatrix() {
 
         for (int i = 0; i < N; i++) {
@@ -44,6 +46,13 @@ public static double traverseColumnMajor() {
    public static void main(String[] args) {
 
     initializeMatrix();
+
+    System.out.println("Warming up JVM...");
+
+    for (int i = 0; i < 5; i++) {
+        resultSink = traverseRowMajor();
+        resultSink = traverseColumnMajor();
+    }
 
     final int RUNS = 10;
 
