@@ -80,6 +80,22 @@ public class InventoryCatalogManager {
                 "Benchmark workers did not terminate");
         }
 
+        long totalStock = 0;
+
+        for (Integer stock : inventory.values()) {
+            totalStock += stock;
+        }
+
+        long expectedStock = PRODUCTS * 100L + OPERATIONS / 2L;
+
+        if (totalStock != expectedStock) {
+            throw new AssertionError(
+                "Incorrect final stock total: " + totalStock);
+        }
+
+        System.out.println("Final Stock Total: " + totalStock);
+        System.out.println("Inventory Verification: PASSED");
+
         double seconds = (System.nanoTime() - start) / 1_000_000_000.0;
         double throughput = OPERATIONS / seconds;
 
