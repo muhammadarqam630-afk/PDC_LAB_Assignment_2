@@ -14,7 +14,8 @@ public class AsyncWebEngineApp {
         LogProcessorTask logTask = new LogProcessorTask();
 
         Thread logger = new Thread(logTask, "Log-Worker");
-
+        
+        long startTime = System.nanoTime();
         telemetry.start();
         logger.start();
 
@@ -30,7 +31,21 @@ try {
     System.out.println("Main thread interrupted.");
     return;
 }
+long endTime = System.nanoTime();
 
+double elapsedSeconds =
+        (endTime - startTime) / 1_000_000_000.0;
+
+if (telemetry.isAlive() || logger.isAlive()) {
+    throw new IllegalStateException("A worker is still running");
+}
+
+System.out.printf(
+    "Total Concurrent Execution Time: %.3f seconds%n",
+    elapsedSeconds
+);
+
+System.out.println("Worker Completion Check: PASSED");
 System.out.println("Telemetry Final State: " + telemetry.getState());
 System.out.println("Logger Final State: " + logger.getState());
 
