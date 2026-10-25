@@ -64,23 +64,42 @@ public static double traverseColumnMajor() {
 
     for (int run = 1; run <= RUNS; run++) {
 
-        long rowStart = System.nanoTime();
-        double rowSum = traverseRowMajor();
-        long rowEnd = System.nanoTime();
+        double rowSum;
+        double columnSum;
 
-        long columnStart = System.nanoTime();
-        double columnSum = traverseColumnMajor();
-        long columnEnd = System.nanoTime();
+        double rowMs;
+        double columnMs;
+
+        if (run % 2 == 1) {
+
+            long rowStart = System.nanoTime();
+            rowSum = traverseRowMajor();
+            long rowEnd = System.nanoTime();
+
+            long columnStart = System.nanoTime();
+            columnSum = traverseColumnMajor();
+            long columnEnd = System.nanoTime();
+
+            rowMs = (rowEnd - rowStart) / 1_000_000.0;
+            columnMs = (columnEnd - columnStart) / 1_000_000.0;
+
+        } else {
+
+            long columnStart = System.nanoTime();
+            columnSum = traverseColumnMajor();
+            long columnEnd = System.nanoTime();
+
+            long rowStart = System.nanoTime();
+            rowSum = traverseRowMajor();
+            long rowEnd = System.nanoTime();
+
+            rowMs = (rowEnd - rowStart) / 1_000_000.0;
+            columnMs = (columnEnd - columnStart) / 1_000_000.0;
+        }
 
         if (Math.abs(rowSum - columnSum) > 0.01) {
             throw new AssertionError("Traversal sums differ");
         }
-
-        double rowMs =
-                (rowEnd - rowStart) / 1_000_000.0;
-
-        double columnMs =
-                (columnEnd - columnStart) / 1_000_000.0;
 
         totalRowTime += rowMs;
         totalColumnTime += columnMs;
