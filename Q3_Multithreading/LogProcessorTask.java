@@ -3,10 +3,21 @@ package Q3_Multithreading;
 public class LogProcessorTask implements Runnable {
 
     @Override
-public void run() {
+    public void run() {
 
-    for (int i = 1; i <= 5; i++) {
-        System.out.println("Processing log batch: " + i);
+        for (int i = 1; i <= 5; i++) {
+
+            System.out.println(
+                "[" + Thread.currentThread().getName() + "] "
+                + "Processing log batch " + i
+            );
+
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                return;
+            }
+        }
     }
-}
 }
