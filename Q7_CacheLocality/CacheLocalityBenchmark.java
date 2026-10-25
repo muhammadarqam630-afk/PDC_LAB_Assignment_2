@@ -45,26 +45,61 @@ public static double traverseColumnMajor() {
 
     initializeMatrix();
 
-    long rowStart = System.nanoTime();
-    double rowSum = traverseRowMajor();
-    long rowEnd = System.nanoTime();
+    final int RUNS = 10;
 
-    long columnStart = System.nanoTime();
-    double columnSum = traverseColumnMajor();
-    long columnEnd = System.nanoTime();
-
-    double rowMs =
-            (rowEnd - rowStart) / 1_000_000.0;
-
-    double columnMs =
-            (columnEnd - columnStart) / 1_000_000.0;
+    double totalRowTime = 0;
+    double totalColumnTime = 0;
 
     System.out.println("===== CACHE LOCALITY BENCHMARK =====");
+    System.out.println("Matrix Size: 2000 x 2000");
 
-    System.out.printf("Row Sum: %.2f%n", rowSum);
-    System.out.printf("Column Sum: %.2f%n", columnSum);
+    for (int run = 1; run <= RUNS; run++) {
 
-    System.out.printf("Row Time: %.3f ms%n", rowMs);
-    System.out.printf("Column Time: %.3f ms%n", columnMs);
+        long rowStart = System.nanoTime();
+        double rowSum = traverseRowMajor();
+        long rowEnd = System.nanoTime();
+
+        long columnStart = System.nanoTime();
+        double columnSum = traverseColumnMajor();
+        long columnEnd = System.nanoTime();
+
+        if (Math.abs(rowSum - columnSum) > 0.01) {
+            throw new AssertionError("Traversal sums differ");
+        }
+
+        double rowMs =
+                (rowEnd - rowStart) / 1_000_000.0;
+
+        double columnMs =
+                (columnEnd - columnStart) / 1_000_000.0;
+
+        totalRowTime += rowMs;
+        totalColumnTime += columnMs;
+
+        System.out.printf(
+            "Run %d | Row: %.3f ms | Column: %.3f ms%n",
+            run, rowMs, columnMs
+        );
+    }
+
+    double averageRow = totalRowTime / RUNS;
+    double averageColumn = totalColumnTime / RUNS;
+
+    System.out.println("\n===== FINAL RESULTS =====");
+
+    System.out.printf(
+        "Average Row-Major Time: %.3f ms%n",
+        averageRow
+    );
+
+    System.out.printf(
+        "Average Column-Major Time: %.3f ms%n",
+        averageColumn
+    );
+
+    System.out.printf(
+        "Row-Major Speedup: %.2fx%n",
+        averageColumn / averageRow
+    );
 }
 }
