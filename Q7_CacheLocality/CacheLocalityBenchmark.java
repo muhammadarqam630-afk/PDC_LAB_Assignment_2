@@ -41,15 +41,30 @@ public static double traverseColumnMajor() {
     return sum;
 }
 
-    public static void main(String[] args) {
+   public static void main(String[] args) {
 
-        initializeMatrix();
-        double rowSum = traverseRowMajor();
-        double columnSum = traverseColumnMajor();
+    initializeMatrix();
 
-        System.out.printf("Row-Major Sum: %.2f%n", rowSum);
-        System.out.printf(
-            "Column-Major Sum: %.2f%n", columnSum);
-        System.out.println("Matrix Initialized: " + N + " x " + N);
-    }
+    long rowStart = System.nanoTime();
+    double rowSum = traverseRowMajor();
+    long rowEnd = System.nanoTime();
+
+    long columnStart = System.nanoTime();
+    double columnSum = traverseColumnMajor();
+    long columnEnd = System.nanoTime();
+
+    double rowMs =
+            (rowEnd - rowStart) / 1_000_000.0;
+
+    double columnMs =
+            (columnEnd - columnStart) / 1_000_000.0;
+
+    System.out.println("===== CACHE LOCALITY BENCHMARK =====");
+
+    System.out.printf("Row Sum: %.2f%n", rowSum);
+    System.out.printf("Column Sum: %.2f%n", columnSum);
+
+    System.out.printf("Row Time: %.3f ms%n", rowMs);
+    System.out.printf("Column Time: %.3f ms%n", columnMs);
+}
 }
