@@ -15,11 +15,25 @@ public class CacheLocalityBenchmark {
             }
         }
     }
+public static double traverseRowMajor() {
 
+    double sum = 0;
+
+    for (int i = 0; i < N; i++) {
+        for (int j = 0; j < N; j++) {
+            sum += matrix[i][j];
+        }
+    }
+
+    return sum;
+}
     public static void main(String[] args) {
 
         initializeMatrix();
+double rowSum = traverseRowMajor();
 
+System.out.printf(
+    "Row-Major Sum: %.2f%n", rowSum);
         System.out.println("Matrix Initialized: " + N + " x " + N);
     }
 }
