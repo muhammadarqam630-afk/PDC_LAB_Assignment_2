@@ -76,13 +76,13 @@ public class InventoryCatalogManager {
         return runBenchmark(map, "SYNCHRONIZED MAP", true);
     }
 
-    public static double benchmarkConcurrentHashMap() throws Exception {
+    public static double benchmarkConcurrentMap() throws Exception {
         Map<String, Integer> map = createInventory(new ConcurrentHashMap<>());
         return runBenchmark(map, "CONCURRENT HASH MAP", false);
     }
 
     public static void main(String[] args) throws Exception {
         benchmarkSynchronizedMap();
-        benchmarkConcurrentHashMap();
+        benchmarkConcurrentMap();
     }
 }
