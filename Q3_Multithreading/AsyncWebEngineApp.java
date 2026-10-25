@@ -8,6 +8,16 @@ public class AsyncWebEngineApp {
             "Main Thread: " + Thread.currentThread().getName()
         );
 
-        System.out.println("Web engine initialized.");
+        TelemetryThread telemetry = new TelemetryThread();
+        telemetry.setName("Telemetry-Worker");
+
+        LogProcessorTask logTask = new LogProcessorTask();
+
+        Thread logger = new Thread(logTask, "Log-Worker");
+
+        telemetry.start();
+        logger.start();
+
+        System.out.println("Both workers started.");
     }
 }
