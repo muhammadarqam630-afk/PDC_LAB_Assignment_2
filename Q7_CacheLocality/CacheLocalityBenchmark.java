@@ -27,13 +27,29 @@ public static double traverseRowMajor() {
 
     return sum;
 }
+
+public static double traverseColumnMajor() {
+
+    double sum = 0;
+
+    for (int j = 0; j < N; j++) {
+        for (int i = 0; i < N; i++) {
+            sum += matrix[i][j];
+        }
+    }
+
+    return sum;
+}
+
     public static void main(String[] args) {
 
         initializeMatrix();
-double rowSum = traverseRowMajor();
+        double rowSum = traverseRowMajor();
+        double columnSum = traverseColumnMajor();
 
-System.out.printf(
-    "Row-Major Sum: %.2f%n", rowSum);
+        System.out.printf("Row-Major Sum: %.2f%n", rowSum);
+        System.out.printf(
+            "Column-Major Sum: %.2f%n", columnSum);
         System.out.println("Matrix Initialized: " + N + " x " + N);
     }
 }
