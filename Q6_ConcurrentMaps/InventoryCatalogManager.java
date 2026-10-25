@@ -26,14 +26,40 @@ public class InventoryCatalogManager {
 
         return map;
     }
+    private static double runBenchmark(
+        Map<String, Integer> inventory,
+        String name) throws Exception {
 
-    public static void main(String[] args) {
+    long start = System.nanoTime();
 
-        Map<String, Integer> inventory =
-                createInventory(new HashMap<>());
+    long total = 0;
 
-        System.out.println("Products: " + inventory.size());
-        System.out.println("Workers required: " + THREADS);
-        System.out.println("Operations required: " + OPERATIONS);
+    for (int i = 0; i < OPERATIONS; i++) {
+        String product = "PRODUCT-" + (i % PRODUCTS);
+
+        inventory.compute(product, (key, stock) -> stock + 1);
+        total += inventory.get(product);
     }
+
+    double seconds =
+            (System.nanoTime() - start) / 1_000_000_000.0;
+
+    System.out.println(name);
+    System.out.println("Read checksum: " + total);
+    System.out.printf("Execution Time: %.3f ms%n", seconds * 1000);
+
+    return seconds;
+}
+public static double benchmarkSynchronizedMap()
+        throws Exception {
+
+    Map<String, Integer> map = createInventory(
+        Collections.synchronizedMap(new HashMap<>())
+    );
+
+    return runBenchmark(map, "SYNCHRONIZED MAP");
+}
+    public static void main(String[] args) throws Exception {
+    benchmarkSynchronizedMap();
+}
 }
