@@ -128,7 +128,59 @@ public class InventoryCatalogManager {
     }
 
     public static void main(String[] args) throws Exception {
-        benchmarkSynchronizedMap();
-        benchmarkConcurrentMap();
+
+    System.out.println("===== INVENTORY BENCHMARK =====");
+
+    System.out.println("\nJVM Warmup");
+    benchmarkSynchronizedMap();
+    benchmarkConcurrentMap();
+
+    final int RUNS = 5;
+
+    double syncTotal = 0;
+    double concurrentTotal = 0;
+
+    for (int run = 1; run <= RUNS; run++) {
+
+        System.out.println("\n===== RUN " + run + " =====");
+
+        if (run % 2 == 1) {
+            syncTotal += benchmarkSynchronizedMap();
+            concurrentTotal += benchmarkConcurrentMap();
+        } else {
+            concurrentTotal += benchmarkConcurrentMap();
+            syncTotal += benchmarkSynchronizedMap();
+        }
     }
+
+    double syncAverage = syncTotal / RUNS;
+    double concurrentAverage = concurrentTotal / RUNS;
+
+    System.out.println("\n===== FINAL RESULTS =====");
+
+    System.out.printf(
+        "SynchronizedMap Average: %.3f ms%n",
+        syncAverage * 1000
+    );
+
+    System.out.printf(
+        "ConcurrentHashMap Average: %.3f ms%n",
+        concurrentAverage * 1000
+    );
+
+    System.out.printf(
+        "SynchronizedMap Throughput: %.2f ops/sec%n",
+        OPERATIONS / syncAverage
+    );
+
+    System.out.printf(
+        "ConcurrentHashMap Throughput: %.2f ops/sec%n",
+        OPERATIONS / concurrentAverage
+    );
+
+    System.out.printf(
+        "Relative Speed Ratio: %.2fx%n",
+        syncAverage / concurrentAverage
+    );
+}
 }
