@@ -1,0 +1,21 @@
+package Q1_TradingEvents;
+
+public class TradeEvent {
+
+    protected String senderId;
+    protected long timestamp;
+    protected double basePrice;
+
+    public TradeEvent(String senderId, long timestamp, double basePrice) {
+        this.senderId = senderId;
+        this.timestamp = timestamp;
+        this.basePrice = basePrice;
+    }
+
+    public void dispatch() {
+        System.out.println("===== GENERIC TRADE EVENT =====");
+        System.out.println("Sender ID: " + senderId);
+        System.out.println("Timestamp: " + timestamp);
+        System.out.printf("Base Price: %.2f%n", basePrice);
+    }
+}
