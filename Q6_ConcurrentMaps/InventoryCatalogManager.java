@@ -81,6 +81,7 @@ public class InventoryCatalogManager {
         }
 
         double seconds = (System.nanoTime() - start) / 1_000_000_000.0;
+        double throughput = OPERATIONS / seconds;
 
         System.out.println("\n===== " + name + " =====");
         System.out.println("Workers: " + THREADS);
@@ -89,6 +90,10 @@ public class InventoryCatalogManager {
         System.out.printf(
             "Execution Time: %.3f ms%n",
             seconds * 1000
+        );
+        System.out.printf(
+            "Throughput: %.2f operations/second%n",
+            throughput
         );
 
         return seconds;
